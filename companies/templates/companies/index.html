@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Script d'import d'entreprises</title>
+</head>
+<body>
+    {% if request.user.is_authenticated %}
+        <h2>Page des entreprises</h2>
+        <form method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+            <div>
+                <label for="file">Fichier: </label>
+                <input type="file" name="file" id="file" accept="application/zip" required>
+            </div>
+            <button type="submit">Envoyer</button>
+        </form>
+        {% if message %}
+            <p style="color:green;font-weight: bold;">{{message}}</p>
+        {% endif %}
+    {% else %}
+        <h2>Connectez vous pour avoir accès à la page</h2>
+        <a href="http://127.0.0.1:8000/admin/">Se connecter</a>
+    {% endif %}
+</body>
+</html>
