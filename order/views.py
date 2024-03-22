@@ -195,6 +195,20 @@ def uploadFile(request):
         return Response({"id": id, "size":newFile.size}, status=status.HTTP_201_CREATED)
     return Response({'errors':[]}, status=status.HTTP_400_BAD_REQUEST)
 
+# Méthode pour supprimer une signature
+#TODO: implémentation de la suppression de la signature
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deleteAttachement(request):
+    fileToDelete = list(request.data.get("files"))
+    order = Attachment.objects.get(pk=fileToDelete[0]).order
+    for file in fileToDelete:
+        attachment = Attachment.objects.get(pk=file)
+        filename = attachment.filename
+        attachment.delete()
+        OrderAction.objects.create(id=uuid7(),description=" a mis supprimé une pièce jointe le ", order=order, user_id=getUserId(request), additionalContext=filename)
+    return Response({"message":"Pièce jointe supprimée" if len(fileToDelete) == 1 else "Pièces jointes supprimées"}, status=status.HTTP_200_OK)
+
 # Méthode pour obtenir les différents types de fichier
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
